@@ -8,6 +8,9 @@ project(cozmonaut)
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/")
 
+add_subdirectory(third_party/glad)
+add_subdirectory(third_party/glfw)
+
 include(GetGitRevisionDescription)
 
 get_git_head_revision(GIT_REFSPEC GIT_HASH)
@@ -23,6 +26,7 @@ set(cozmo_SRC_FILES
 
 add_executable(cozmo ${cozmo_SRC_FILES})
 set_target_properties(cozmo PROPERTIES C_STANDARD 99)
+target_link_libraries(cozmo PRIVATE glad glfw)
 
 # Git-related definitions
 target_compile_definitions(cozmo PRIVATE
