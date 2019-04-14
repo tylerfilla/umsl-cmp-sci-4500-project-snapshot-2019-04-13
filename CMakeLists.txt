@@ -7,7 +7,7 @@ cmake_minimum_required(VERSION 3.4)
 project(cozmonaut)
 
 set(cozmo_SRC_FILES
-        main.c
+        src/main.c
         )
 
 add_executable(cozmo ${cozmo_SRC_FILES})
