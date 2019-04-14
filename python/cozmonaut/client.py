@@ -5,27 +5,18 @@
 
 from typing import Dict, Tuple
 
+from core import Server
+
 
 class Client:
     """The cozmonaut client interface."""
 
-    def __init__(self):
-        pass
+    def __init__(self, server: Server):
+        self.server = server
 
     #
     # Entry Points
     #
-
-    def entry_friend_remove(self, friend: int) -> bool:
-        """
-        The entry point for friend removal.
-
-        :param friend: The ID of the friend to remove
-        :return: True on success, else false
-        """
-
-        # TODO: Not implemented
-        pass
 
     def entry_friend_list(self, friend: int) -> bool:
         """
@@ -36,9 +27,22 @@ class Client:
         """
 
         # TODO: Not implemented
-        pass
+        print(f'entry_friend_list({friend})')
+        return True
 
-    def entry_start_interactive(self) -> bool:
+    def entry_friend_remove(self, friend: int) -> bool:
+        """
+        The entry point for friend removal.
+
+        :param friend: The ID of the friend to remove
+        :return: True on success, else false
+        """
+
+        # TODO: Not implemented
+        print(f'entry_friend_remove({friend})')
+        return True
+
+    def entry_interact(self) -> bool:
         """
         The entry point for actually running the robots interactively.
 
@@ -46,7 +50,8 @@ class Client:
         """
 
         # TODO: Not implemented
-        pass
+        print('entry_interact()')
+        return True
 
     #
     # Camera Interface

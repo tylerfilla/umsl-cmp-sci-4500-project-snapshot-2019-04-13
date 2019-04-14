@@ -13,6 +13,9 @@ add_subdirectory(third_party/glfw)
 
 include(GetGitRevisionDescription)
 
+find_package(PythonInterp 3.7 REQUIRED)
+find_package(PythonLibs 3.7 REQUIRED)
+
 get_git_head_revision(GIT_REFSPEC GIT_HASH)
 
 set(cozmo_VERSION_MAJOR 0)
@@ -20,13 +23,18 @@ set(cozmo_VERSION_MINOR 1)
 set(cozmo_VERSION_PATCH 0)
 
 set(cozmo_SRC_FILES
+        src/op/common.c
+        src/op/friend_list.c
+        src/op/friend_remove.c
+        src/op/interact.c
         src/global.c
         src/main.c
         )
 
 add_executable(cozmo ${cozmo_SRC_FILES})
 set_target_properties(cozmo PROPERTIES C_STANDARD 99)
-target_link_libraries(cozmo PRIVATE glad glfw)
+target_include_directories(cozmo PRIVATE ${PYTHON_INCLUDE_DIR})
+target_link_libraries(cozmo PRIVATE ${PYTHON_LIBRARY} glad glfw)
 
 # Git-related definitions
 target_compile_definitions(cozmo PRIVATE

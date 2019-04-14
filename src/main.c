@@ -7,6 +7,10 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "op/friend_list.h"
+#include "op/friend_remove.h"
+#include "op/interact.h"
+
 #include "global.h"
 #include "version.h"
 
@@ -15,7 +19,7 @@ enum operation {
   op_nop = 0,
   op_friend_list,
   op_friend_remove,
-  op_start_interactive,
+  op_interact,
 };
 
 /** A command-line option. */
@@ -152,7 +156,7 @@ static const struct subcommand g_subcommand_root = {
       .description = "start interactive session",
       .num_aliases = 1,
       .aliases = (const char* []) {"go"},
-      .operation = op_start_interactive,
+      .operation = op_interact,
       .num_subcommands = 0,
       .subcommands = NULL,
       .num_options = 0,
@@ -527,6 +531,7 @@ static int read_arguments(enum operation* op, const struct subcommand*** out_cmd
 
       fprintf(stderr, "no such long option: %s\n", arg);
       free(opt_arg);
+      free(cmd_chain);
       return 1;
     } else if (arg_len > 1 && arg[0] == '-') {
       // Argument starts with one dash and is not a long option, so treat it like a short (POSIX-style) option(s)
@@ -648,16 +653,63 @@ int main(int argc, char* argv[]) {
     return 0;
   }
 
-  // Dispatch operation
+  // Dispatch the computed operation
   switch (op) {
-    case op_friend_list:
-      printf("want to list friends: %s\n", g_opt_data_friend_id);
-      return 0;
-    case op_friend_remove:
-      printf("want to remove friends: %s\n", g_opt_data_friend_id);
-      return 0;
-    case op_start_interactive:
-      printf("want to start interactive session\n");
-      return 0;
+    case op_friend_list: {
+      // If optional friend ID was given
+      int friend_id = -1;
+      if (g_opt_data_friend_id) {
+        // Convert friend ID to an integer
+        char* friend_id_error;
+        friend_id = (int) strtol(g_opt_data_friend_id, &friend_id_error, 10);
+        if (friend_id_error != g_opt_data_friend_id + strlen(g_opt_data_friend_id)) {
+          fprintf(stderr, "malformed friend id: %s\n", g_opt_data_friend_id);
+          return 1;
+        }
+
+        // Enforce range
+        if (friend_id <= 0) {
+          fprintf(stderr, "friend id out of range: %s\n", g_opt_data_friend_id);
+          return 1;
+        }
+      }
+
+      // Call friend list operation
+      return op_friend_list_main(&(struct op_friend_list_args) {
+        .friend_id = friend_id,
+      });
+    }
+    case op_friend_remove: {
+      // If friend ID was given
+      int friend_id = -1;
+      if (g_opt_data_friend_id) {
+        // Convert friend ID to an integer
+        char* friend_id_error;
+        friend_id = (int) strtol(g_opt_data_friend_id, &friend_id_error, 10);
+        if (friend_id_error != g_opt_data_friend_id + strlen(g_opt_data_friend_id)) {
+          fprintf(stderr, "malformed friend id: %s\n", g_opt_data_friend_id);
+          return 1;
+        }
+
+        // Enforce range
+        if (friend_id <= 0) {
+          fprintf(stderr, "friend id out of range: %s\n", g_opt_data_friend_id);
+          return 1;
+        }
+      } else {
+        // Friend ID is required
+        fprintf(stderr, "friend id is required\n");
+        return 1;
+      }
+
+      // Call friend removal operation
+      return op_friend_remove_main(&(struct op_friend_remove_args) {
+        .friend_id = friend_id,
+      });
+    }
+    case op_interact: {
+      // Call interaction operation
+      return op_interact_main(&(struct op_interact_args) {});
+    }
   }
 }
