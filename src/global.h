@@ -15,10 +15,18 @@ struct global {
   const char** argv;
 };
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /** An immutable view of global program info. */
 extern const struct global* const g;
 
 /** A mutable view of global program info. */
 extern struct global* const g_mut;
+
+#ifdef __cplusplus
+} // extern "C"
+#endif
 
 #endif // #ifndef GLOBAL_H
