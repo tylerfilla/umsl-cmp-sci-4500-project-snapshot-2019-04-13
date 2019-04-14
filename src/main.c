@@ -355,7 +355,8 @@ static void print_legal() {
  */
 static void print_version() {
   printf("cozmo " VERSION_STRING "\n");
-  // TODO: Include build date and git hashes...
+  printf("built on " VERSION_TIMESTAMP "\n");
+  printf("vcs " VERSION_VCS_HASH " (" VERSION_VCS_BRANCH ")\n");
 }
 
 /**

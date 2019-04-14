@@ -23,4 +23,13 @@
     STRINGIFY(VERSION_MINOR) "."  \
     STRINGIFY(VERSION_PATCH)
 
+/** The build timestamp. */
+#define VERSION_TIMESTAMP __DATE__ " " __TIME__
+
+/** The version control branch. */
+#define VERSION_VCS_BRANCH STRINGIFY(__git_refspec)
+
+/** The version control hash. */
+#define VERSION_VCS_HASH STRINGIFY(__git_hash)
+
 #endif // #ifndef VERSION_H
