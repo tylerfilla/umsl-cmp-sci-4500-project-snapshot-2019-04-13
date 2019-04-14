@@ -342,17 +342,13 @@ static void print_usage(const struct subcommand* cmd) {
   }
 }
 
-/**
- * Print legal text.
- */
+/** Print legal text. */
 static void print_legal() {
   printf("Cozmonaut\n");
   printf("Copyright 2019 The Cozmonaut Contributors\n");
 }
 
-/**
- * Print version text.
- */
+/** Print version text. */
 static void print_version() {
   printf("cozmo " VERSION_STRING "\n");
   printf("built on " VERSION_TIMESTAMP "\n");
