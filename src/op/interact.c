@@ -13,11 +13,8 @@
 
 /** The Python code for this operation. */
 static const char OPERATION_CODE[] =
-  "from _core import Server\n"
-  "from cozmonaut.client import Client\n"
-  "server = Server()\n"
-  "client = Client(server)\n"
-  "result = client.entry_interact()\n";
+  "from cozmonaut.entry_point.interact import EntryPointInteract\n"
+  "EntryPointInteract().main()\n";
 
 int op_interact_main(struct op_interact_args* args) {
   // Initialize the operation
